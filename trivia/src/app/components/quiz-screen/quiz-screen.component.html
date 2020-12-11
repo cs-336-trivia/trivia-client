@@ -1,3 +1,34 @@
-<p>quiz-screen works!</p>
 <!-- form -->
+<h2>Select question parameters: </h2>
+<hr>
+<div class="inputs">
+    <div class="parameterInput">
+        <label>Difficulty: </label>
+        <select [(ngModel)]="difficulty">
+            <option *ngFor="let option of difficulties">{{option}}</option>
+        </select>
+    </div>
+    <div class="parameterInput">
+        <label>Category: </label>
+        <select [(ngModel)]="category">
+            <option *ngFor="let option of categories">{{option}}</option>
+        </select>
+    </div>
+    <button (click)="fetchData()">Start Quiz</button>
+</div>
+<div class="tempstats">
+    <p>Questions right: {{rightCount}}</p>
+    <p>Questions wrong: {{wrongCount}}</p>
+    <p>Win Percentage: {{winPercentage}}</p>
+</div>
+<br>
+<hr>
 <!-- questions -->
+<div class="questionCard" *ngFor="let question of data"> 
+    <h3>{{question.question}}</h3>
+    <ol>
+        <li *ngFor="let choice of question.choiceList" [ngClass]="{'green-bg': question.gotIt && choice == question.correct_answer}" (click)="chooseAnswer(choice)">{{choice}}</li>
+    </ol>
+    <h3 *ngIf="question.gotIt">CORRECT!</h3>
+    <h3 *ngIf="question.gotIt === false">Incorrect!</h3>
+</div>
