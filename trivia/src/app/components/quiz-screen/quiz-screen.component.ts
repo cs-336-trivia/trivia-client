@@ -97,13 +97,15 @@ export class QuizScreenComponent implements OnInit {
     }
     return;
   }
-  chooseAnswer(choice) {
+  async chooseAnswer(choice) {
     if(choice === this.data[0].correct_answer) {
       this.data[0].gotIt = true;
+      await new Promise(r => setTimeout(r, 1000))
       this.fetchData();
       this.rightCount++;
     } else if (choice === this.data[0].incorrect_answers[0] || choice === this.data[0].incorrect_answers[1] || choice === this.data[0].incorrect_answers[2]){
       this.data[0].gotIt = false;
+      await new Promise(r => setTimeout(r, 1000))
       this.fetchData();
       this.wrongCount++;
     }
