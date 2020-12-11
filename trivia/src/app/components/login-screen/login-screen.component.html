@@ -1,47 +1,108 @@
-<p>login-screen works!</p>
+<h2>Welcome to our Trivia web app!</h2>
 
-<div class="example-container">
-  <mat-form-field appearance="fill">
-    <mat-label>Enter your email</mat-label>
-    <input
-      matInput
-      placeholder="pat@example.com"
-      [formControl]="email"
-      required
-      [(ngModel)]="emailAddress"
-      (change)="changedEmailAddress()"
-    />
-    <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
-  </mat-form-field>
+<div *ngIf="loading">
+  <mat-spinner></mat-spinner>
 </div>
-
-<div class="example-container">
-  <mat-form-field appearance="fill">
-    <mat-label>Enter your password</mat-label>
-    <input
-      matInput
-      [type]="hide ? 'password' : 'text'"
-      [(ngModel)]="password"
-    />
-    <button
-      mat-icon-button
-      matSuffix
-      (click)="hide = !hide"
-      [attr.aria-label]="'Hide password'"
-      [attr.aria-pressed]="hide"
-    >
-      <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
-    </button>
-  </mat-form-field>
-
-  <div>
-    <button mat-raised-button class="button" color="primary">Submit</button>
-    <div>
-      <button mat-raised-button class="button" color="primary">
-        Create Account
-      </button>
+<div class="login-card">
+  <mat-card *ngIf="!loading">
+    <div class="example-container">
+      <mat-form-field appearance="fill">
+        <mat-label>Enter your email</mat-label>
+        <input
+          matInput
+          placeholder="pat@example.com"
+          [formControl]="email"
+          required
+          [(ngModel)]="user.emailAddress"
+          (change)="changedEmailAddress()"
+        />
+        <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
+      </mat-form-field>
     </div>
-  </div>
+
+    <div class="example-container">
+      <mat-form-field appearance="fill">
+        <mat-label>Enter your password</mat-label>
+        <input
+          matInput
+          [type]="hide ? 'password' : 'text'"
+          [(ngModel)]="user.password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="hide = !hide"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide"
+        >
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <button
+        mat-raised-button
+        class="button"
+        color="primary"
+        (click)="onSubmit()"
+      >
+        Submit
+      </button>
+      <div>
+        <button
+          mat-raised-button
+          class="button"
+          color="primary"
+          (click)="createAccount()"
+        >
+          Create Account
+        </button>
+      </div>
+    </div>
+  </mat-card>
 </div>
 
-<mat-card> <mat-card-content>Hello</mat-card-content></mat-card>
+<div *ngIf="alertShow">
+  <mat-card>
+    <mat-card-content>
+      <h1 mat-dialog-title>Error!</h1>
+      <div mat-dialog-content>
+        <p>Your email or password is incorrect!</p>
+        <p>Note: Password must be at least 6 characters!</p>
+      </div>
+      <div mat-dialog-actions>
+        <button
+          class="button"
+          mat-raised-button
+          color="primary"
+          (click)="closeAlert()"
+        >
+          Close
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div *ngIf="createdUserAlert">
+  <mat-card>
+    <mat-card-content>
+      <h1 mat-dialog-title>Success!</h1>
+      <div mat-dialog-content>
+        <p>Your new User has been created!</p>
+        <p>Please sign in now!</p>
+      </div>
+      <div mat-dialog-actions>
+        <button
+          class="button"
+          mat-raised-button
+          color="primary"
+          (click)="closeCreatedUserAlert()"
+        >
+          Close
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

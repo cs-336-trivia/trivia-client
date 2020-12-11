@@ -1,3 +1,24 @@
+toolbar-header {
+  font-size: 20px;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 500;
+}
+
+h2 {
+  margin-top: 5px;
+  margin-left: 18px;
+  margin-bottom: 0px;
+  font-weight: 500;
+}
+
+.login-card {
+  justify-content: center;
+  align-items: center;
+}
+
 .example-container {
   margin-left: 5px;
 }
@@ -5,4 +26,9 @@
 .button {
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+.error-message {
+  margin: 5px;
+  padding: 10px;
 }
