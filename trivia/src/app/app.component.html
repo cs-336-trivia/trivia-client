@@ -4,7 +4,7 @@
       <h1>Trivia</h1>
     </span>
     <span class="example-spacer"></span>
-    <button *ngIf="backToQuiz" mat-icon-button (click)="goToQuiz()">
+    <button *ngIf="backToQuiz === 'true'" mat-icon-button (click)="goToQuiz()">
       <mat-icon>arrow_back</mat-icon>
     </button>
     <button mat-icon-button (click)="goToStats()">

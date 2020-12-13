@@ -19,13 +19,15 @@ h2 {
   align-items: center;
 }
 
-.example-container {
-  margin-left: 5px;
+.reset-password {
+  margin-bottom: 20px;
+  text-decoration: underline;
 }
 
-// .input-text {
-//   //padding-bottom: 10px;
-// }
+.reset-password:hover {
+  color: purple;
+  cursor: pointer;
+}
 
 .button {
   margin-top: 5px;
