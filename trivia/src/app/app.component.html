@@ -1,15 +1,15 @@
-<div>
-  <a routerLink="/">Login Screen</a>
-  <a routerLink="/quiz">Quiz Screen</a>
-  <a routerLink="/stats">Stats Screen</a>
-</div>
-
 <mat-toolbar color="primary">
   <mat-toolbar-row>
     <span>
       <h1>Trivia</h1>
     </span>
     <span class="example-spacer"></span>
+    <button *ngIf="backToQuiz" mat-icon-button (click)="goToQuiz()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <button mat-icon-button (click)="goToStats()">
+      <mat-icon>assessment</mat-icon>
+    </button>
     <button mat-icon-button (click)="logoutUser()">
       <mat-icon>logout</mat-icon>
     </button>
