@@ -6,11 +6,10 @@ import { StatsScreenComponent } from './components/stats-screen/stats-screen.com
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  { path: '', component: LoginScreenComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full'},
+  { path: 'login', component: LoginScreenComponent },
   { path: 'quiz', component: QuizScreenComponent, canActivate: [AuthGuard] },
   { path: 'stats', component: StatsScreenComponent, canActivate: [AuthGuard] },
-
-  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({

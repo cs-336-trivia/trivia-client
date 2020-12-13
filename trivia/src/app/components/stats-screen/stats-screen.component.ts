@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { UserStatsService } from 'src/app/services/userStats.service';
+import FirestoreRec from 'src/app/services/userStats.service';
+import { AngularFirestoreDocument } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-stats-screen',
@@ -7,9 +10,50 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StatsScreenComponent implements OnInit {
 
-  constructor() { }
+  public currentUser: string = localStorage.getItem('currentUser');
+  public userStatsCollection: FirestoreRec[];
+  public userStatsRef: AngularFirestoreDocument<FirestoreRec>;
+  public userStatsDoc: FirestoreRec;
+
+  public currentUserRightCount: number;
+  public currentUserWrongCount: number;
+  public currentUserWinPercentage: number;
+
+  constructor(
+    private userStatsService: UserStatsService,
+  ) {
+    // this.userStatsService.getAll().valueChanges().subscribe(result => {
+    //   this.userStatsCollection = result;
+    //   console.log(this.userStatsCollection);
+    // });
+
+    this.userStatsRef = this.userStatsService.getAll().doc(this.currentUser);
+
+    this.userStatsRef.valueChanges().subscribe(result => {
+      this.userStatsDoc = result;
+      console.log(this.userStatsDoc);
+      console.log(this.userStatsDoc.rightCount);
+      console.log(this.userStatsDoc.wrongCount);
+      console.log(this.userStatsDoc.winPercentage);
+      console.log(result);
+      console.log(result.rightCount);
+      console.log(result.wrongCount);
+      console.log(result.winPercentage);
+
+      this.currentUserRightCount = this.userStatsDoc.rightCount;
+      this.currentUserWrongCount = this.userStatsDoc.wrongCount;
+      this.currentUserWinPercentage = this.userStatsDoc.winPercentage;
+    });
+  }
+
+  // public currentUserRightCount: number;
+  // public currentUserWrongCount: number;
+  // public currentUserWinPercentage: number;
 
   ngOnInit(): void {
+    // this.currentUserRightCount = this.userStatsDoc.rightCount;
+    // this.currentUserWrongCount = this.userStatsDoc.wrongCount;
+    // this.currentUserWinPercentage = this.userStatsDoc.winPercentage;
   }
 
 }

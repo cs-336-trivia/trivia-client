@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { UserStatsService } from 'src/app/services/userStats.service';
+import FirestoreRec from 'src/app/services/userStats.service';
+import { AngularFirestoreDocument } from '@angular/fire/firestore';
+
 export interface Question {
     category: string;
     type: string;
@@ -21,7 +25,7 @@ export interface Difficulty {
   selector: 'app-quiz-screen',
   templateUrl: './quiz-screen.component.html',
   styleUrls: ['./quiz-screen.component.scss']
-}) 
+})
 
 
 export class QuizScreenComponent implements OnInit {
@@ -35,10 +39,33 @@ export class QuizScreenComponent implements OnInit {
   rightCount: number = 0;
   wrongCount: number = 0;
   winPercentage: number = 0.0;
-  constructor() { }
+
+  public currentUser: string = localStorage.getItem('currentUser');
+  public userStatsCollection: FirestoreRec[];
+  public userStatsRef: AngularFirestoreDocument<FirestoreRec>;
+  public userStatsDoc: FirestoreRec;
+
+  constructor(
+    private userStatsService: UserStatsService,
+    ) {
+      // this.userStatsService.getAll().valueChanges().subscribe(result => {
+      //   this.userStatsCollection = result;
+      //   console.log(this.userStatsCollection);
+      // });
+
+      this.userStatsRef = this.userStatsService.getAll().doc(this.currentUser);
+
+      this.userStatsRef.valueChanges().subscribe(result => {
+        this.userStatsDoc = result;
+        // console.log(result.id);
+        // console.log(this.userStatsDoc);
+      });
+    }
+
   ngOnInit(): void {
-    this.data
+    this.data;
   }
+
   shuffleArray(array: string[]): string[] {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -46,6 +73,7 @@ export class QuizScreenComponent implements OnInit {
     }
     return(array)
   }
+
   async fetchData(): Promise<void> {
     if(!this.difficulty) {
       this.difficulty = "Random";
@@ -61,27 +89,27 @@ export class QuizScreenComponent implements OnInit {
         }
         // console.log(result);
         const formated = await result.json();
-        
-        // console.log(formated);
+
+        console.log(formated);
         this.data.unshift(formated.results[0]); //adds new thing to beginning of the array
 
         //For some reason, doing .json() doesn't handle many special characters, so I had to manually do it here for the question and answers
-        this.data[0].question = this.data[0].question.replace(/&quot;/g,'"'); 
-        this.data[0].question = this.data[0].question.replace(/&#039;/g,"'"); 
+        this.data[0].question = this.data[0].question.replace(/&quot;/g,'"');
+        this.data[0].question = this.data[0].question.replace(/&#039;/g,"'");
         this.data[0].question = this.data[0].question.replace(/&rsquo;/g,"'");
         this.data[0].question = this.data[0].question.replace(/&amp;/g,"&");
         this.data[0].question = this.data[0].question.replace(/&eacute;/g,"é");
         this.data[0].question = this.data[0].question.replace(/&ouml;/g,"ö");
 
-        this.data[0].correct_answer = this.data[0].correct_answer.replace(/&quot;/g,'"'); 
-        this.data[0].correct_answer = this.data[0].correct_answer.replace(/&#039;/g,"'"); 
+        this.data[0].correct_answer = this.data[0].correct_answer.replace(/&quot;/g,'"');
+        this.data[0].correct_answer = this.data[0].correct_answer.replace(/&#039;/g,"'");
         this.data[0].correct_answer = this.data[0].correct_answer.replace(/&rsquo;/g,"'");
         this.data[0].correct_answer = this.data[0].correct_answer.replace(/&amp;/g,"&");
         this.data[0].correct_answer = this.data[0].correct_answer.replace(/&eacute;/g,"é");
         this.data[0].correct_answer = this.data[0].correct_answer.replace(/&ouml;/g,"ö");
 
-        this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&quot;/g,'"')); 
-        this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&#039;/g,"'")); 
+        this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&quot;/g,'"'));
+        this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&#039;/g,"'"));
         this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&rsquo;/g,"'"));
         this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&amp;/g,"&"));
         this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&eacute;/g,"é"));
@@ -97,18 +125,22 @@ export class QuizScreenComponent implements OnInit {
     }
     return;
   }
+
   async chooseAnswer(choice) {
     if(choice === this.data[0].correct_answer) {
       this.data[0].gotIt = true;
       await new Promise(r => setTimeout(r, 1000))
       this.fetchData();
       this.rightCount++;
+      await this.userStatsService.update(this.currentUser, { rightCount: this.userStatsDoc.rightCount + 1 });
     } else if (choice === this.data[0].incorrect_answers[0] || choice === this.data[0].incorrect_answers[1] || choice === this.data[0].incorrect_answers[2]){
       this.data[0].gotIt = false;
       await new Promise(r => setTimeout(r, 1000))
       this.fetchData();
       this.wrongCount++;
+      await this.userStatsService.update(this.currentUser, { wrongCount: this.userStatsDoc.wrongCount + 1 });
     }
     this.winPercentage = this.rightCount / (this.wrongCount + this.rightCount)
+    await this.userStatsService.update(this.currentUser, { winPercentage: this.userStatsDoc.rightCount / (this.userStatsDoc.rightCount + this.userStatsDoc.wrongCount) });
   }
 }

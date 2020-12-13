@@ -9,6 +9,7 @@
       <mat-form-field appearance="fill">
         <mat-label>Enter your email</mat-label>
         <input
+          class="input-text"
           matInput
           placeholder="pat@example.com"
           [formControl]="email"
@@ -24,6 +25,7 @@
       <mat-form-field appearance="fill">
         <mat-label>Enter your password</mat-label>
         <input
+          class="input-text"
           matInput
           [type]="hide ? 'password' : 'text'"
           [(ngModel)]="user.password"
@@ -45,9 +47,9 @@
         mat-raised-button
         class="button"
         color="primary"
-        (click)="onSubmit()"
+        (click)="onLogIn()"
       >
-        Submit
+        Log In
       </button>
       <div>
         <button
@@ -60,49 +62,5 @@
         </button>
       </div>
     </div>
-  </mat-card>
-</div>
-
-<div *ngIf="alertShow">
-  <mat-card>
-    <mat-card-content>
-      <h1 mat-dialog-title>Error!</h1>
-      <div mat-dialog-content>
-        <p>Your email or password is incorrect!</p>
-        <p>Note: Password must be at least 6 characters!</p>
-      </div>
-      <div mat-dialog-actions>
-        <button
-          class="button"
-          mat-raised-button
-          color="primary"
-          (click)="closeAlert()"
-        >
-          Close
-        </button>
-      </div>
-    </mat-card-content>
-  </mat-card>
-</div>
-
-<div *ngIf="createdUserAlert">
-  <mat-card>
-    <mat-card-content>
-      <h1 mat-dialog-title>Success!</h1>
-      <div mat-dialog-content>
-        <p>Your new User has been created!</p>
-        <p>Please sign in now!</p>
-      </div>
-      <div mat-dialog-actions>
-        <button
-          class="button"
-          mat-raised-button
-          color="primary"
-          (click)="closeCreatedUserAlert()"
-        >
-          Close
-        </button>
-      </div>
-    </mat-card-content>
   </mat-card>
 </div>
