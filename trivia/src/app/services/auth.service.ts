@@ -7,7 +7,7 @@ import 'firebase/auth';
 })
 export class AuthService {
 
-  constructor() { }
+  constructor() {}
 
   loginUser(email: string, password: string): Promise<firebase.auth.UserCredential> {
     return firebase.auth().signInWithEmailAndPassword(email, password);
