@@ -3,7 +3,8 @@
 <div *ngIf="loading">
   <mat-spinner></mat-spinner>
 </div>
-<div class="login-card">
+
+<div>
   <mat-card *ngIf="!loading">
     <div class="example-container">
       <mat-form-field appearance="fill">
@@ -21,7 +22,7 @@
       </mat-form-field>
     </div>
 
-    <div class="example-container">
+    <div>
       <mat-form-field appearance="fill">
         <mat-label>Enter your password</mat-label>
         <input

@@ -14,18 +14,19 @@ h2 {
   font-weight: 500;
 }
 
-.login-card {
-  justify-content: center;
-  align-items: center;
-}
-
 .example-container {
   margin-left: 5px;
 }
 
-// .input-text {
-//   //padding-bottom: 10px;
-// }
+.reset-password {
+  margin-bottom: 20px;
+  text-decoration: underline;
+}
+
+.reset-password:hover {
+  color: purple;
+  cursor: pointer;
+}
 
 .button {
   margin-top: 5px;
