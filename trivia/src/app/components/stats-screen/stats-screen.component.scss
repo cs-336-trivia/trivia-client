@@ -1,0 +1,35 @@
+.header {
+  margin-left: 5px;
+  font-weight: 600;
+  padding: 10px;
+  text-decoration: underline;
+}
+
+.subheader {
+  margin-left: 6px;
+}
+
+mat-card > mat-card {
+  margin: 10px;
+  font-size: 12pt;
+  font-weight: 500;
+}
+
+.answer {
+  display: inline-block;
+  width: calc((100% - 104px)/2);
+}
+
+.correct {
+  background-color: #90EE90;
+  min-width: min-content;
+}
+
+.incorrect {
+  background-color: #E3AEB1;
+  min-width: min-content;
+}
+
+.average {
+  background-color: #ffd700;
+}

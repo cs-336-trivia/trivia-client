@@ -1,7 +1,16 @@
-<h1>Welcome to {{ currentUser }} stats!</h1>
+<h1 class="header">Welcome to {{ currentUser }} statistics page!</h1>
 
 <span>
-  <p>Overall RightCount: {{ currentUserRightCount }}</p>
-  <p>Overall WrongCount: {{ currentUserWrongCount }}</p>
-  <p>Overall WinPercentage: {{ currentUserWinPercentage }}</p>
+  <mat-card>
+    <h2 class="subheader">Here are your All-Time Statistics:</h2>
+    <mat-card class="correct answer">
+      {{ currentUserRightCount }} Questions Correct.
+    </mat-card>
+    <mat-card class="incorrect answer">
+      {{ currentUserWrongCount }} Questions Wrong.
+    </mat-card>
+    <mat-card class="average">
+      Win Percentage:  {{ (currentUserWinPercentage * 100).toPrecision(4) }}%
+      </mat-card>
+  </mat-card>
 </span>

@@ -31,6 +31,14 @@ export class StatsScreenComponent implements OnInit {
 
     this.userStatsRef.valueChanges().subscribe(result => {
       this.userStatsDoc = result;
+      console.log(this.userStatsDoc);
+      console.log(this.userStatsDoc.rightCount);
+      console.log(this.userStatsDoc.wrongCount);
+      console.log(this.userStatsDoc.winPercentage);
+      console.log(result);
+      console.log(result.rightCount);
+      console.log(result.wrongCount);
+      console.log(result.winPercentage);
 
       this.currentUserRightCount = this.userStatsDoc.rightCount;
       this.currentUserWrongCount = this.userStatsDoc.wrongCount;
