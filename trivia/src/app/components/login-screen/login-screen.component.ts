@@ -58,7 +58,7 @@ export class LoginScreenComponent implements OnInit {
                                      this.user.password);
 
       this.loading = false;
-      this.router.navigateByUrl('quiz');
+      this.router.navigateByUrl('quiz', { queryParams: { id: this.user.emailAddress } });
       localStorage.setItem('currentUser', this.user.emailAddress);
     } catch (error) {
       this.dialog.open(LogInErrorDialog);
@@ -83,13 +83,9 @@ export class LoginScreenComponent implements OnInit {
   }
 
   resetPassword(): void {
-    if (!this.user.emailAddress) {
-      return; // put up an alert or something.
-    }
     this.authSvc.resetPassword(this.user.emailAddress);
+    this.dialog.open(ResetPasswordDialog);
   }
-
-
 
 }
 
@@ -110,5 +106,11 @@ export class CreateUserSuccessDialog {}
   templateUrl: '../../alerts/create-user-error-dialog.html',
 })
 export class CreateUserErrorDialog {}
+
+@Component({
+  selector: 'reset-password-dialog',
+  templateUrl: '../../alerts/reset-password-dialog.html',
+})
+export class ResetPasswordDialog {}
 
 
