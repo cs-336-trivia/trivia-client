@@ -15,9 +15,12 @@
       <option *ngFor="let option of categories">{{ option }}</option>
     </select>
   </div>
-  <button (click)="fetchData()">Start Quiz</button>
+  <button (click)="startQuiz()">Start Quiz</button>
 </div>
-<div class="tempstats">
+
+<div class="tempStats">
+  <p>Time Remaining: {{timeLeft}}</p>
+  <p>New Questions Remaining: {{ 9 - questionCount }}</p>
   <mat-card class="correct">{{ rightCount }} Correct</mat-card>
   <mat-card class="incorrect">{{ wrongCount }} Wrong</mat-card>
   <mat-card class="win-percent">Win Percentage: {{ (winPercentage * 100).toPrecision(4) }}%</mat-card>
@@ -38,5 +41,5 @@
     </li>
   </ol>
   <h3 *ngIf="question.gotIt">CORRECT!</h3>
-  <h3 *ngIf="question.gotIt === false">Incorrect!</h3>
+  <h3 *ngIf="question.gotIt === false">Incorrect - correct answer was {{question.correct_answer}}</h3>
 </div>
