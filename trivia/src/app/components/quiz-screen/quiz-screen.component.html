@@ -15,11 +15,11 @@
       <option *ngFor="let option of categories">{{ option }}</option>
     </select>
   </div>
-  <button (click)="startQuiz()">Start Quiz</button>
+  <button mat-raised-button color="primary" (click)="startQuiz()">Start Quiz</button>
 </div>
 
 <div class="tempStats">
-  <mat-card class="timeRemaining">Time Remaining: {{timeLeft}}</mat-card>
+  <mat-card class="timeRemaining">Time Remaining: {{timeLeft}}</mat-card> 
   <mat-card class="questionsRemaining">Question: {{ questionCount }} out of 10</mat-card>
   <mat-card class="correct">{{ rightCount }} Correct</mat-card>
   <mat-card class="incorrect">{{ wrongCount }} Wrong</mat-card>
@@ -35,7 +35,7 @@
       [ngClass]="{
         'green-bg': question.gotIt && choice == question.correct_answer
       }"
-      (click)="chooseAnswer(choice)"
+      (click)="chooseAnswer(choice, question.question)"
     >
       {{ choice }}
     </li>
