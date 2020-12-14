@@ -7,11 +7,11 @@
   <mat-card *ngIf="!loading">
     <div>
       <mat-form-field appearance="fill">
-        <mat-label>Enter your email</mat-label>
+        <mat-label>Enter email</mat-label>
         <input
           class="input-text"
           matInput
-          placeholder="pat@example.com"
+          placeholder="johndoe@example.com"
           [formControl]="email"
           required
           [(ngModel)]="user.emailAddress"
@@ -23,7 +23,7 @@
 
     <div>
       <mat-form-field appearance="fill">
-        <mat-label>Enter your password</mat-label>
+        <mat-label>Enter password</mat-label>
         <input
           class="input-text"
           matInput
