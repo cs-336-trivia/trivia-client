@@ -5,13 +5,15 @@
     </span>
     <span class="example-spacer"></span>
     <button *ngIf="backToQuiz === 'true'" mat-icon-button (click)="goToQuiz()">
-      <mat-icon>arrow_back</mat-icon>
+      <mat-icon class="example-icon">arrow_back</mat-icon>
     </button>
+    <div class="divider"></div>
     <button mat-icon-button (click)="goToStats()">
-      <mat-icon>assessment</mat-icon>
+      <mat-icon class="example-icon">assessment</mat-icon>
     </button>
+    <div class="divider"></div>
     <button mat-icon-button (click)="logoutUser()">
-      <mat-icon>logout</mat-icon>
+      <mat-icon class="example-icon">logout</mat-icon>
     </button>
   </mat-toolbar-row>
 </mat-toolbar>

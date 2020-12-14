@@ -42,6 +42,7 @@ export class QuizScreenComponent implements OnInit {
   questionCount: number = 0;
   gameOver: boolean = false;
   timeLeft: number = 15;
+  processing: boolean = false;
   public currentUser: string = localStorage.getItem('currentUser');
   public userStatsCollection: FirestoreRec[];
   public userStatsRef: AngularFirestoreDocument<FirestoreRec>;
@@ -81,8 +82,12 @@ export class QuizScreenComponent implements OnInit {
   }
 
   async startTimer() {
+    await new Promise(r => setTimeout(r, 1000))
     while(this.timeLeft > 0) {
       this.timeLeft--;
+      if(this.timeLeft <=5) {
+        document.getElementById('timeRemaining').style.backgroundColor = 'rgb(' + 255*(1-this.timeLeft/15) + ',' + 255*(this.timeLeft/15) +',0)';
+      }
       await new Promise(r => setTimeout(r, 1000))
     }
     if(this.data[0].gotIt === undefined) {
@@ -162,10 +167,10 @@ export class QuizScreenComponent implements OnInit {
   }
 
   async chooseAnswer(choice, question) {
-    if(this.data[0].question === question) {
+    if(this.data[0].question === question && this.questionCount != 10 && !this.processing) {
+      this.processing = true;
       console.log(choice);
       if(choice === this.data[0].correct_answer) {
-        console.log(1);
         this.data[0].gotIt = true;
         this.timeLeft = 0;
         await new Promise(r => setTimeout(r, 1250))
@@ -192,6 +197,7 @@ export class QuizScreenComponent implements OnInit {
       }
       this.winPercentage = this.rightCount / (this.wrongCount + this.rightCount)
       await this.userStatsService.update(this.currentUser, { winPercentage: this.userStatsDoc.rightCount / (this.userStatsDoc.rightCount + this.userStatsDoc.wrongCount) });
+      this.processing = false;
     }
   }
 }
