@@ -163,7 +163,7 @@ export class QuizScreenComponent implements OnInit {
       await new Promise(r => setTimeout(r, 1250))
       this.rightCount++;
       await this.userStatsService.update(this.currentUser, { rightCount: this.userStatsDoc.rightCount + 1 });
-      if(this.questionCount <= 3) {
+      if(this.questionCount <= 8) {
         this.questionCount++;
         this.fetchData();
       } else {
@@ -175,7 +175,7 @@ export class QuizScreenComponent implements OnInit {
       await new Promise(r => setTimeout(r, 1250))
       this.wrongCount++;
       await this.userStatsService.update(this.currentUser, { wrongCount: this.userStatsDoc.wrongCount + 1 });
-      if(this.questionCount <= 3) {
+      if(this.questionCount <= 8) {
         this.questionCount++;
         this.fetchData();
       } else {
