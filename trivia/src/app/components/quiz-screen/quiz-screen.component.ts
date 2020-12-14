@@ -29,8 +29,6 @@ export interface Difficulty {
   templateUrl: './quiz-screen.component.html',
   styleUrls: ['./quiz-screen.component.scss']
 })
-
-
 export class QuizScreenComponent implements OnInit {
   data:Question[] = [];
   difficulty: string;
@@ -78,7 +76,7 @@ export class QuizScreenComponent implements OnInit {
 
   startQuiz(): void {
     if(!this.started) {
-      this.started = true;
+      this.started = true; //So they can't spam the start button
       this.data = [];
       this.questionCount = 0;
       this.fetchData();
@@ -89,20 +87,28 @@ export class QuizScreenComponent implements OnInit {
     }
   }
 
-  async startTimer() {
+  async startTimer(): Promise<void> {
     await new Promise(r => setTimeout(r, 1000))
     while(this.timeLeft > 0) {
       this.timeLeft--;
       await new Promise(r => setTimeout(r, 1000))
     }
     if(this.data[0].gotIt === undefined) {
-      this.chooseAnswer("oof",this.data[0].question);
+      this.chooseAnswer("oof",this.data[0].question); //Sends a fake answer choice that's obviously wrong
     }
+  }
+
+  async endQuiz(): Promise<void> {
+    this.gameOver = true;
+    this.started = false;
+    this.dialog.open(QuizCompletedDialog);
+    await this.userStatsService.update(this.currentUser, { quizzesCompleted: this.userStatsDoc.quizzesCompleted + 1 });
   }
 
   async fetchData(): Promise<void> {
     this.timeLeft = 15;
     this.gameOver = false;
+    //Defaults to random if nothing chosen
     if(!this.difficulty) {
       this.difficulty = "Random";
     }
@@ -115,22 +121,18 @@ export class QuizScreenComponent implements OnInit {
             console.log('Looks like there was a problem. Status Code: ' + result.status);
             return;
         }
-        // console.log(result);
         const formated = await result.json();
-
-        // console.log(formated);
         let newQuestion = true;
 
         //Checking if we already have this question
         for(let i = 0; i < this.data.length; i++) {
           if(this.data[i].correct_answer === formated.results[0].correct_answer) {
             newQuestion = false;
-            console.log("DUPE")
           }
         }
 
         if(newQuestion) {
-          this.data.unshift(formated.results[0]); //adds new thing to beginning of the array
+          this.data.unshift(formated.results[0]); //adds new question to the beginning of the array
 
           //For some reason, doing .json() doesn't handle many special characters, so I had to manually do it here for the question and answers
           //You mentioned decodeURI, it works on the w3schools test code editor things, but for some reason not in the web console
@@ -164,7 +166,6 @@ export class QuizScreenComponent implements OnInit {
           this.data[0].gotIt = undefined;
           this.data[0].gotItWrong = undefined;
           this.startTimer();
-        // console.log(this.data);
         } else {
           this.fetchData();
         }
@@ -175,13 +176,12 @@ export class QuizScreenComponent implements OnInit {
   }
 
   async chooseAnswer(choice, question) {
-    if(this.data[0].question === question && !this.gameOver && !this.processing) {
-      this.processing = true;
-      console.log(choice);
+    if(this.data[0].question === question && !this.gameOver && !this.processing) { //Part of this logic is to "disable" the click events for previous questions
+      this.processing = true; //So they can't spam an answer choice
       if(choice === this.data[0].correct_answer) {
         this.data[0].gotIt = true;
         this.data[0].gotItWrong = false;
-        this.timeLeft = 0;
+        this.timeLeft = 0; //Implicitly breaks out of the timer loop
         await new Promise(r => setTimeout(r, 1250))
         this.rightCount++;
         await this.userStatsService.update(this.currentUser, { rightCount: this.userStatsDoc.rightCount + 1 });
@@ -189,11 +189,7 @@ export class QuizScreenComponent implements OnInit {
           this.questionCount++;
           this.fetchData();
         } else {
-          console.log("end")
-          this.gameOver = true;
-          this.started = false;
-          this.dialog.open(QuizCompletedDialog);
-          await this.userStatsService.update(this.currentUser, { quizzesCompleted: this.userStatsDoc.quizzesCompleted + 1 });
+          this.endQuiz();
         }
       } else {
         this.data[0].gotIt = false;
@@ -207,11 +203,7 @@ export class QuizScreenComponent implements OnInit {
           this.questionCount++;
           this.fetchData();
         } else {
-          console.log("end")
-          this.gameOver = true;
-          this.started = false;
-          this.dialog.open(QuizCompletedDialog);
-          await this.userStatsService.update(this.currentUser, { quizzesCompleted: this.userStatsDoc.quizzesCompleted + 1 });
+          this.endQuiz();
         }
       }
       this.winPercentage = this.rightCount / (this.wrongCount + this.rightCount)
