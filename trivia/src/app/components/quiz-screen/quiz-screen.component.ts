@@ -39,7 +39,9 @@ export class QuizScreenComponent implements OnInit {
   rightCount: number = 0;
   wrongCount: number = 0;
   winPercentage: number = 0.0;
-
+  questionCount: number = 0;
+  gameOver: boolean = false;
+  timeLeft: number = 10;
   public currentUser: string = localStorage.getItem('currentUser');
   public userStatsRef: AngularFirestoreDocument<FirestoreRec>;
   public userStatsDoc: FirestoreRec;
@@ -57,7 +59,7 @@ export class QuizScreenComponent implements OnInit {
   ngOnInit(): void {
     this.data;
   }
-
+  //This function found here: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
   shuffleArray(array: string[]): string[] {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -66,7 +68,29 @@ export class QuizScreenComponent implements OnInit {
     return(array)
   }
 
+  startQuiz(): void {
+    this.data = [];
+    this.questionCount = 0;
+    this.fetchData();
+  }
+
+  async startTimer() {
+    while(this.timeLeft > 0) {
+      this.timeLeft--;
+      await new Promise(r => setTimeout(r, 1000))
+    }
+    if(this.data[0].gotIt === undefined) {
+      this.chooseAnswer("oof");
+    }
+    // this.chooseAnswer("Out of Time");
+    // if(this.timeLeft != -1) {
+    //   this.chooseAnswer("Out of Time");
+    // }
+  }
+
   async fetchData(): Promise<void> {
+    this.timeLeft = 10;
+    this.gameOver = false;
     if(!this.difficulty) {
       this.difficulty = "Random";
     }
@@ -82,36 +106,48 @@ export class QuizScreenComponent implements OnInit {
         // console.log(result);
         const formated = await result.json();
 
-        console.log(formated);
-        this.data.unshift(formated.results[0]); //adds new thing to beginning of the array
+        // console.log(formated);
+        let newQuestion = true;
 
-        //For some reason, doing .json() doesn't handle many special characters, so I had to manually do it here for the question and answers
-        this.data[0].question = this.data[0].question.replace(/&quot;/g,'"');
-        this.data[0].question = this.data[0].question.replace(/&#039;/g,"'");
-        this.data[0].question = this.data[0].question.replace(/&rsquo;/g,"'");
-        this.data[0].question = this.data[0].question.replace(/&amp;/g,"&");
-        this.data[0].question = this.data[0].question.replace(/&eacute;/g,"é");
-        this.data[0].question = this.data[0].question.replace(/&ouml;/g,"ö");
+        //Checking if we already have this question
+        for(let i = 0; i < this.data.length; i++) {
+          if(this.data[i].correct_answer === formated.results[0].correct_answer) {
+            newQuestion = false;
+          }
+        }
 
-        this.data[0].correct_answer = this.data[0].correct_answer.replace(/&quot;/g,'"');
-        this.data[0].correct_answer = this.data[0].correct_answer.replace(/&#039;/g,"'");
-        this.data[0].correct_answer = this.data[0].correct_answer.replace(/&rsquo;/g,"'");
-        this.data[0].correct_answer = this.data[0].correct_answer.replace(/&amp;/g,"&");
-        this.data[0].correct_answer = this.data[0].correct_answer.replace(/&eacute;/g,"é");
-        this.data[0].correct_answer = this.data[0].correct_answer.replace(/&ouml;/g,"ö");
+        if(newQuestion) {
+          this.data.unshift(formated.results[0]); //adds new thing to beginning of the array
 
-        this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&quot;/g,'"'));
-        this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&#039;/g,"'"));
-        this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&rsquo;/g,"'"));
-        this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&amp;/g,"&"));
-        this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&eacute;/g,"é"));
-        this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&ouml;/g,"ö"));
+          //For some reason, doing .json() doesn't handle many special characters, so I had to manually do it here for the question and answers
+          this.data[0].question = this.data[0].question.replace(/&quot;/g,'"');
+          this.data[0].question = this.data[0].question.replace(/&#039;/g,"'");
+          this.data[0].question = this.data[0].question.replace(/&rsquo;/g,"'");
+          this.data[0].question = this.data[0].question.replace(/&amp;/g,"&");
+          this.data[0].question = this.data[0].question.replace(/&eacute;/g,"é");
+          this.data[0].question = this.data[0].question.replace(/&ouml;/g,"ö");
 
-        //Puts the correct and incorrect answers into 1 array and randomizes them for display purposes
-        this.data[0].choiceList = this.shuffleArray([this.data[0].correct_answer, this.data[0].incorrect_answers[0], this.data[0].incorrect_answers[1], this.data[0].incorrect_answers[2]]);
-        this.data[0].gotIt = undefined;
+          this.data[0].correct_answer = this.data[0].correct_answer.replace(/&quot;/g,'"');
+          this.data[0].correct_answer = this.data[0].correct_answer.replace(/&#039;/g,"'");
+          this.data[0].correct_answer = this.data[0].correct_answer.replace(/&rsquo;/g,"'");
+          this.data[0].correct_answer = this.data[0].correct_answer.replace(/&amp;/g,"&");
+          this.data[0].correct_answer = this.data[0].correct_answer.replace(/&eacute;/g,"é");
+          this.data[0].correct_answer = this.data[0].correct_answer.replace(/&ouml;/g,"ö");
 
-        console.log(this.data);
+          this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&quot;/g,'"'));
+          this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&#039;/g,"'"));
+          this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&rsquo;/g,"'"));
+          this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&amp;/g,"&"));
+          this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&eacute;/g,"é"));
+          this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => answer.replace(/&ouml;/g,"ö"));
+
+          //Puts the correct and incorrect answers into 1 array and randomizes them for display purposes
+          this.data[0].choiceList = this.shuffleArray([this.data[0].correct_answer, this.data[0].incorrect_answers[0], this.data[0].incorrect_answers[1], this.data[0].incorrect_answers[2]]);
+          this.data[0].gotIt = undefined;
+          
+          this.startTimer();
+        // console.log(this.data);
+        } 
     } catch (err) {
         console.log('Fetch Error :-S', err);
     }
@@ -119,18 +155,32 @@ export class QuizScreenComponent implements OnInit {
   }
 
   async chooseAnswer(choice) {
+    console.log(choice);
     if(choice === this.data[0].correct_answer) {
+      console.log(1);
       this.data[0].gotIt = true;
-      await new Promise(r => setTimeout(r, 1000))
-      this.fetchData();
+      this.timeLeft = -1;
+      await new Promise(r => setTimeout(r, 1250))
       this.rightCount++;
       await this.userStatsService.update(this.currentUser, { rightCount: this.userStatsDoc.rightCount + 1 });
-    } else if (choice === this.data[0].incorrect_answers[0] || choice === this.data[0].incorrect_answers[1] || choice === this.data[0].incorrect_answers[2]){
+      if(this.questionCount <= 3) {
+        this.questionCount++;
+        this.fetchData();
+      } else {
+        this.gameOver = true;
+      }
+    } else {
       this.data[0].gotIt = false;
-      await new Promise(r => setTimeout(r, 1000))
-      this.fetchData();
+      this.timeLeft = -1;
+      await new Promise(r => setTimeout(r, 1250))
       this.wrongCount++;
       await this.userStatsService.update(this.currentUser, { wrongCount: this.userStatsDoc.wrongCount + 1 });
+      if(this.questionCount <= 3) {
+        this.questionCount++;
+        this.fetchData();
+      } else {
+        this.gameOver = true;
+      }
     }
     this.winPercentage = this.rightCount / (this.wrongCount + this.rightCount)
     await this.userStatsService.update(this.currentUser, { winPercentage: this.userStatsDoc.rightCount / (this.userStatsDoc.rightCount + this.userStatsDoc.wrongCount) });

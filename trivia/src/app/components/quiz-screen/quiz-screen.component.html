@@ -15,10 +15,11 @@
       <option *ngFor="let option of categories">{{ option }}</option>
     </select>
   </div>
-  <button (click)="fetchData()">Start Quiz</button>
+  <button (click)="startQuiz()">Start Quiz</button>
 </div>
-<div class="tempstats">
-  <p>Questions right: {{ rightCount }}</p>
+<div class="tempStats">
+  <p>Time Remaining: {{timeLeft}}</p>
+  <p>New Questions Remaining: {{ 4 - questionCount }}</p>
   <p>Questions wrong: {{ wrongCount }}</p>
   <p>Win Percentage: {{ winPercentage }}</p>
 </div>
@@ -39,5 +40,5 @@
     </li>
   </ol>
   <h3 *ngIf="question.gotIt">CORRECT!</h3>
-  <h3 *ngIf="question.gotIt === false">Incorrect!</h3>
+  <h3 *ngIf="question.gotIt === false">Incorrect - correct answer was {{question.correct_answer}}</h3>
 </div>
