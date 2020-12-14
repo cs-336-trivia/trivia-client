@@ -91,11 +91,6 @@ export class QuizScreenComponent implements OnInit {
     await new Promise(r => setTimeout(r, 1000))
     while(this.timeLeft > 0) {
       this.timeLeft--;
-      // if(this.timeLeft <= 5) {
-      //   document.getElementById('timeRemaining').style.backgroundColor = 'rgb(' + 255*(1-this.timeLeft/15) + ',' + 255*(this.timeLeft/15) +',0)';
-      // } else {
-      //   document.getElementById('timeRemaining').style.backgroundColor = '#d6d6ea';
-      // }
       await new Promise(r => setTimeout(r, 1000))
     }
     if(this.data[0].gotIt === undefined) {
@@ -128,6 +123,7 @@ export class QuizScreenComponent implements OnInit {
         for(let i = 0; i < this.data.length; i++) {
           if(this.data[i].correct_answer === formated.results[0].correct_answer) {
             newQuestion = false;
+            console.log("DUPE")
           }
         }
 
@@ -167,6 +163,8 @@ export class QuizScreenComponent implements OnInit {
 
           this.startTimer();
         // console.log(this.data);
+        } else {
+          this.fetchData();
         }
     } catch (err) {
         console.log('Fetch Error :-S', err);
