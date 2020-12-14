@@ -6,6 +6,7 @@ export default interface FirestoreRec {
   winPercentage: number;
   rightCount: number;
   wrongCount: number;
+  quizzesCompleted: number;
 }
 
 @Injectable({
@@ -29,7 +30,7 @@ export class UserStatsService {
   }
 
   create(id: string): any {
-    return this.userStats.doc(id).set({ id: id, winPercentage: 0, rightCount: 0, wrongCount: 0 });
+    return this.userStats.doc(id).set({ id: id, winPercentage: 0, rightCount: 0, wrongCount: 0, quizzesCompleted: 0 });
   }
 
   update(id: string, data: any): Promise<void> {

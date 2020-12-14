@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserStatsService } from 'src/app/services/userStats.service';
 import FirestoreRec from 'src/app/services/userStats.service';
 import { AngularFirestoreDocument } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 
 export interface Question {
     category: string;
@@ -51,6 +52,7 @@ export class QuizScreenComponent implements OnInit {
 
   constructor(
     private userStatsService: UserStatsService,
+    public dialog: MatDialog,
     ) {
 
       this.userStatsRef = this.userStatsService.getAll().doc(this.currentUser);
@@ -189,6 +191,8 @@ export class QuizScreenComponent implements OnInit {
           console.log("end")
           this.gameOver = true;
           this.started = false;
+          this.dialog.open(QuizCompletedDialog);
+          await this.userStatsService.update(this.currentUser, { quizzesCompleted: this.userStatsDoc.quizzesCompleted + 1 });
         }
       } else {
         this.data[0].gotIt = false;
@@ -203,6 +207,8 @@ export class QuizScreenComponent implements OnInit {
           console.log("end")
           this.gameOver = true;
           this.started = false;
+          this.dialog.open(QuizCompletedDialog);
+          await this.userStatsService.update(this.currentUser, { quizzesCompleted: this.userStatsDoc.quizzesCompleted + 1 });
         }
       }
       this.winPercentage = this.rightCount / (this.wrongCount + this.rightCount)
@@ -211,3 +217,9 @@ export class QuizScreenComponent implements OnInit {
     }
   }
 }
+
+@Component({
+  selector: 'quiz-completed-dialog',
+  templateUrl: '../../alerts/quiz-completed-dialog.html',
+})
+export class QuizCompletedDialog {}
