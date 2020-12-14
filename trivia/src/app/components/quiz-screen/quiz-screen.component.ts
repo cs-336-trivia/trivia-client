@@ -33,8 +33,11 @@ export interface Difficulty {
   templateUrl: './quiz-screen.component.html',
   styleUrls: ['./quiz-screen.component.scss']
 })
+<<<<<<< HEAD
 
 // Quiz main page typescript breakdown
+=======
+>>>>>>> 3c0ccdbc5978c16d8a766bbc0e383027fea1b830
 export class QuizScreenComponent implements OnInit {
   // Particular page elements and states
   data:Question[] = [];
@@ -86,7 +89,7 @@ export class QuizScreenComponent implements OnInit {
   // Start Quiz variable initialization and setup
   startQuiz(): void {
     if(!this.started) {
-      this.started = true;
+      this.started = true; //So they can't spam the start button
       this.data = [];
       this.questionCount = 0;
       this.fetchData();
@@ -97,9 +100,13 @@ export class QuizScreenComponent implements OnInit {
     }
   }
 
+<<<<<<< HEAD
   // Question timeout functionality
   async startTimer() {
     // One second increments
+=======
+  async startTimer(): Promise<void> {
+>>>>>>> 3c0ccdbc5978c16d8a766bbc0e383027fea1b830
     await new Promise(r => setTimeout(r, 1000))
     // While time is on the clock, decrement counter
     while(this.timeLeft > 0) {
@@ -111,15 +118,29 @@ export class QuizScreenComponent implements OnInit {
     // -> This assumes that the database has no question for which
     //    the correct answer is "oof"
     if(this.data[0].gotIt === undefined) {
-      this.chooseAnswer("oof",this.data[0].question);
+      this.chooseAnswer("oof",this.data[0].question); //Sends a fake answer choice that's obviously wrong
     }
   }
 
+<<<<<<< HEAD
   // Handler for question pulling
   async fetchData(): Promise<void> {
     this.timeLeft = 15;
     this.gameOver = false;
     // If no difficulty is selected
+=======
+  async endQuiz(): Promise<void> {
+    this.gameOver = true;
+    this.started = false;
+    this.dialog.open(QuizCompletedDialog);
+    await this.userStatsService.update(this.currentUser, { quizzesCompleted: this.userStatsDoc.quizzesCompleted + 1 });
+  }
+
+  async fetchData(): Promise<void> {
+    this.timeLeft = 15;
+    this.gameOver = false;
+    //Defaults to random if nothing chosen
+>>>>>>> 3c0ccdbc5978c16d8a766bbc0e383027fea1b830
     if(!this.difficulty) {
       this.difficulty = "Random";
     }
@@ -135,21 +156,28 @@ export class QuizScreenComponent implements OnInit {
             console.log('Looks like there was a problem. Status Code: ' + result.status);
             return;
         }
+<<<<<<< HEAD
 
         const formatted = await result.json();
+=======
+        const formated = await result.json();
+>>>>>>> 3c0ccdbc5978c16d8a766bbc0e383027fea1b830
         let newQuestion = true;
 
         // Checking if we already have this question
         for(let i = 0; i < this.data.length; i++) {
           if(this.data[i].correct_answer === formatted.results[0].correct_answer) {
             newQuestion = false;
-            console.log("DUPE")
           }
         }
 
         // If question is new
         if(newQuestion) {
+<<<<<<< HEAD
           this.data.unshift(formatted.results[0]); //adds new thing to beginning of the array
+=======
+          this.data.unshift(formated.results[0]); //adds new question to the beginning of the array
+>>>>>>> 3c0ccdbc5978c16d8a766bbc0e383027fea1b830
 
           //For some reason, doing .json() doesn't handle many special characters, so I had to manually do it here for the question and answers
           //You mentioned decodeURI, it works on the w3schools test code editor things, but for some reason not in the web console
@@ -200,14 +228,19 @@ export class QuizScreenComponent implements OnInit {
 
   // Handler for chosen answer
   async chooseAnswer(choice, question) {
+<<<<<<< HEAD
     if(this.data[0].question === question && !this.gameOver && !this.processing) {
       this.processing = true;
       console.log(choice);
       // If user selects correct option
+=======
+    if(this.data[0].question === question && !this.gameOver && !this.processing) { //Part of this logic is to "disable" the click events for previous questions
+      this.processing = true; //So they can't spam an answer choice
+>>>>>>> 3c0ccdbc5978c16d8a766bbc0e383027fea1b830
       if(choice === this.data[0].correct_answer) {
         this.data[0].gotIt = true;
         this.data[0].gotItWrong = false;
-        this.timeLeft = 0;
+        this.timeLeft = 0; //Implicitly breaks out of the timer loop
         await new Promise(r => setTimeout(r, 1250))
         this.rightCount++;
         await this.userStatsService.update(this.currentUser, { rightCount: this.userStatsDoc.rightCount + 1 });
@@ -217,11 +250,7 @@ export class QuizScreenComponent implements OnInit {
           this.questionCount++;
           this.fetchData();
         } else {
-          console.log("end")
-          this.gameOver = true;
-          this.started = false;
-          this.dialog.open(QuizCompletedDialog);
-          await this.userStatsService.update(this.currentUser, { quizzesCompleted: this.userStatsDoc.quizzesCompleted + 1 });
+          this.endQuiz();
         }
       } else {
         // If incorrect option is selected
@@ -238,11 +267,7 @@ export class QuizScreenComponent implements OnInit {
           this.questionCount++;
           this.fetchData();
         } else {
-          console.log("end")
-          this.gameOver = true;
-          this.started = false;
-          this.dialog.open(QuizCompletedDialog);
-          await this.userStatsService.update(this.currentUser, { quizzesCompleted: this.userStatsDoc.quizzesCompleted + 1 });
+          this.endQuiz();
         }
       }
       this.winPercentage = this.rightCount / (this.wrongCount + this.rightCount)
