@@ -249,6 +249,7 @@ export class QuizScreenComponent implements OnInit {
   }
 }
 
+// These are components for different alert messages
 @Component({
   selector: 'quiz-completed-dialog',
   templateUrl: '../../alerts/quiz-completed-dialog.html',

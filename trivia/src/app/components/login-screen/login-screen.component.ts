@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { UserStatsService } from 'src/app/services/userStats.service';
 import FirestoreRec from 'src/app/services/userStats.service';
 
+// This is the user object I use to store the email and password
 interface User {
   emailAddress: string;
   password: string;
@@ -18,8 +19,6 @@ interface User {
 })
 export class LoginScreenComponent implements OnInit {
 
-  public userStats: FirestoreRec;
-
   constructor(
     private authSvc: AuthService,
     private router: Router,
@@ -29,14 +28,17 @@ export class LoginScreenComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  // I create the user object and store the email address locally
   public user: User = {
     emailAddress: localStorage.emailAddress,
     password: "",
   };
 
+  // Changes the email as the user inputs it
   changedEmailAddress() {
     localStorage.setItem('emailAddress', this.user.emailAddress);
   }
+  // This is an email form check to make sure you have an @ symbol and a .com
   email = new FormControl('', [Validators.required, Validators.email]);
   getErrorMessage() {
     if (this.email.hasError('required')) {
@@ -45,19 +47,25 @@ export class LoginScreenComponent implements OnInit {
     return this.email.hasError('email') ? 'Not a valid email' : '';
   }
 
+  // Variables for the password
   password: string = "";
   hide: boolean = true;
 
+  // A loading boolean used to display a loading icon if true
   public loading: boolean = false;
 
+  // Called when the user clicks the log in button
   async onLogIn() {
     this.loading = true;
     try {
+      // Logs in the user using firebase authentication
       await this.authSvc.loginUser(this.user.emailAddress,
                                      this.user.password);
 
       this.loading = false;
-      this.router.navigateByUrl('quiz', { queryParams: { id: this.user.emailAddress } });
+      // Navigates to the quiz screen
+      this.router.navigateByUrl('quiz');
+      // Sets the logged in user email address
       localStorage.setItem('currentUser', this.user.emailAddress);
     } catch (error) {
       this.dialog.open(LogInErrorDialog);
@@ -65,12 +73,15 @@ export class LoginScreenComponent implements OnInit {
     }
   }
 
+  // Called when the user clicks the create account button
   async createAccount(): Promise<void> {
     this.loading = true;
     try {
+      // Signs up the user using firebase authentication
       await this.authSvc.signupUser(this.user.emailAddress,
                                     this.user.password);
 
+      // Creates a firebase firestore document for a new user to store their stats
       await this.userStatsService.create(this.user.emailAddress);
 
       this.loading = false;
@@ -81,6 +92,7 @@ export class LoginScreenComponent implements OnInit {
     }
   }
 
+  // Sends a reset password link to valid emails
   resetPassword(): void {
     this.authSvc.resetPassword(this.user.emailAddress);
     this.dialog.open(ResetPasswordDialog);
@@ -88,6 +100,7 @@ export class LoginScreenComponent implements OnInit {
 
 }
 
+// These are components for different alert messages
 @Component({
   selector: 'log-in-error-dialog',
   templateUrl: '../../alerts/log-in-error-dialog.html',

@@ -13,6 +13,7 @@ export default interface FirestoreRec {
   providedIn: 'root'
 })
 
+// The service I use for firebase firestore which has GET's, POST's, PUT's and DELETE's.
 export class UserStatsService {
 
   userStats: AngularFirestoreCollection<FirestoreRec> = null;

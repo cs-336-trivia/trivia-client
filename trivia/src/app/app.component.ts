@@ -26,14 +26,17 @@ export class AppComponent {
     firebase.initializeApp(firebaseConfig);
   }
 
+  // Keeps track of whether or not I can show the back arrow icon to go back to the quiz screen
   public backToQuiz = localStorage.backToQuiz;
 
+  // Called when logging in
   goToQuiz() {
     localStorage.setItem('backToQuiz', 'false');
     this.backToQuiz = localStorage.getItem('backToQuiz');
     this.router.navigateByUrl('quiz');
   }
 
+  // Called when clicking the stats icon
   goToStats() {
     if(this.router.url === '/quiz' || this.router.url == '/stats') {
       this.router.navigateByUrl('stats');
@@ -44,6 +47,7 @@ export class AppComponent {
     }
   }
 
+  // Called when clicking the log out icon
   async logoutUser(): Promise<void> {
     this.authSvc.logoutUser();
     localStorage.setItem('backToQuiz', 'false');
@@ -56,6 +60,7 @@ export class AppComponent {
   }
 }
 
+// These are components for different alert messages
 @Component({
   selector: 'log-in-dialog',
   templateUrl: './alerts/log-in-dialog.html',
