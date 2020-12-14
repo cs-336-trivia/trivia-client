@@ -17,16 +17,21 @@ mat-card > mat-card {
 
 .answer {
   display: inline-block;
-  width: calc((100% - 104px)/2);
+  width: calc((100% - 104px) / 2);
+}
+
+.completed {
+  color: white;
+  background-color: #9e5cfc;
 }
 
 .correct {
-  background-color: #90EE90;
+  background-color: #90ee90;
   min-width: min-content;
 }
 
 .incorrect {
-  background-color: #E3AEB1;
+  background-color: #e3aeb1;
   min-width: min-content;
 }
 

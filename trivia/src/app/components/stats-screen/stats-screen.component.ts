@@ -15,6 +15,7 @@ export class StatsScreenComponent implements OnInit {
   public userStatsRef: AngularFirestoreDocument<FirestoreRec>;
   public userStatsDoc: FirestoreRec;
 
+  public currentUserQuizzesCompleted: number;
   public currentUserRightCount: number;
   public currentUserWrongCount: number;
   public currentUserWinPercentage: number;
@@ -31,29 +32,16 @@ export class StatsScreenComponent implements OnInit {
 
     this.userStatsRef.valueChanges().subscribe(result => {
       this.userStatsDoc = result;
-      console.log(this.userStatsDoc);
-      console.log(this.userStatsDoc.rightCount);
-      console.log(this.userStatsDoc.wrongCount);
-      console.log(this.userStatsDoc.winPercentage);
-      console.log(result);
-      console.log(result.rightCount);
-      console.log(result.wrongCount);
-      console.log(result.winPercentage);
 
+      this.currentUserQuizzesCompleted = this.userStatsDoc.quizzesCompleted;
       this.currentUserRightCount = this.userStatsDoc.rightCount;
       this.currentUserWrongCount = this.userStatsDoc.wrongCount;
       this.currentUserWinPercentage = this.userStatsDoc.winPercentage;
     });
   }
 
-  // public currentUserRightCount: number;
-  // public currentUserWrongCount: number;
-  // public currentUserWinPercentage: number;
 
-  ngOnInit(): void {
-    // this.currentUserRightCount = this.userStatsDoc.rightCount;
-    // this.currentUserWrongCount = this.userStatsDoc.wrongCount;
-    // this.currentUserWinPercentage = this.userStatsDoc.winPercentage;
-  }
+
+  ngOnInit(): void {}
 
 }
