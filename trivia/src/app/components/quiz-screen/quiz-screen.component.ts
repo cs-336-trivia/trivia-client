@@ -92,7 +92,7 @@ export class QuizScreenComponent implements OnInit {
       await new Promise(r => setTimeout(r, 1000))
     }
     if(this.data[0].gotIt === undefined) {
-      this.chooseAnswer("oof");
+      this.chooseAnswer("oof",this.data[0].question);
     }
   }
 
@@ -167,35 +167,37 @@ export class QuizScreenComponent implements OnInit {
     return;
   }
 
-  async chooseAnswer(choice) {
-    console.log(choice);
-    if(choice === this.data[0].correct_answer) {
-      console.log(1);
-      this.data[0].gotIt = true;
-      this.timeLeft = 0;
-      await new Promise(r => setTimeout(r, 1250))
-      this.rightCount++;
-      await this.userStatsService.update(this.currentUser, { rightCount: this.userStatsDoc.rightCount + 1 });
-      if(this.questionCount <= 9) {
-        this.questionCount++;
-        this.fetchData();
+  async chooseAnswer(choice, question) {
+    if(this.data[0].question === question) {
+      console.log(choice);
+      if(choice === this.data[0].correct_answer) {
+        console.log(1);
+        this.data[0].gotIt = true;
+        this.timeLeft = 0;
+        await new Promise(r => setTimeout(r, 1250))
+        this.rightCount++;
+        await this.userStatsService.update(this.currentUser, { rightCount: this.userStatsDoc.rightCount + 1 });
+        if(this.questionCount <= 9) {
+          this.questionCount++;
+          this.fetchData();
+        } else {
+          this.gameOver = true;
+        }
       } else {
-        this.gameOver = true;
+        this.data[0].gotIt = false;
+        this.timeLeft = 0;
+        await new Promise(r => setTimeout(r, 1250))
+        this.wrongCount++;
+        await this.userStatsService.update(this.currentUser, { wrongCount: this.userStatsDoc.wrongCount + 1 });
+        if(this.questionCount <= 9) {
+          this.questionCount++;
+          this.fetchData();
+        } else {
+          this.gameOver = true;
+        }
       }
-    } else {
-      this.data[0].gotIt = false;
-      this.timeLeft = 0;
-      await new Promise(r => setTimeout(r, 1250))
-      this.wrongCount++;
-      await this.userStatsService.update(this.currentUser, { wrongCount: this.userStatsDoc.wrongCount + 1 });
-      if(this.questionCount <= 9) {
-        this.questionCount++;
-        this.fetchData();
-      } else {
-        this.gameOver = true;
-      }
+      this.winPercentage = this.rightCount / (this.wrongCount + this.rightCount)
+      await this.userStatsService.update(this.currentUser, { winPercentage: this.userStatsDoc.rightCount / (this.userStatsDoc.rightCount + this.userStatsDoc.wrongCount) });
     }
-    this.winPercentage = this.rightCount / (this.wrongCount + this.rightCount)
-    await this.userStatsService.update(this.currentUser, { winPercentage: this.userStatsDoc.rightCount / (this.userStatsDoc.rightCount + this.userStatsDoc.wrongCount) });
   }
 }
