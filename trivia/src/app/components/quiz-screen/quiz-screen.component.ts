@@ -41,16 +41,24 @@ export class QuizScreenComponent implements OnInit {
   winPercentage: number = 0.0;
 
   public currentUser: string = localStorage.getItem('currentUser');
+  public userStatsCollection: FirestoreRec[];
   public userStatsRef: AngularFirestoreDocument<FirestoreRec>;
   public userStatsDoc: FirestoreRec;
 
   constructor(
     private userStatsService: UserStatsService,
     ) {
+      // this.userStatsService.getAll().valueChanges().subscribe(result => {
+      //   this.userStatsCollection = result;
+      //   console.log(this.userStatsCollection);
+      // });
+
       this.userStatsRef = this.userStatsService.getAll().doc(this.currentUser);
 
       this.userStatsRef.valueChanges().subscribe(result => {
         this.userStatsDoc = result;
+        // console.log(result.id);
+        // console.log(this.userStatsDoc);
       });
     }
 

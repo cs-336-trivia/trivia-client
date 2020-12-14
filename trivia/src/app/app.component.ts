@@ -26,19 +26,17 @@ export class AppComponent {
     firebase.initializeApp(firebaseConfig);
   }
 
-  public backToQuiz = localStorage.backToQuiz;
+  public backToQuiz: boolean = false;
 
   goToQuiz() {
-    localStorage.setItem('backToQuiz', 'false');
-    this.backToQuiz = localStorage.getItem('backToQuiz');
+    this.backToQuiz = false;
     this.router.navigateByUrl('quiz');
   }
 
   goToStats() {
-    if(this.router.url === '/quiz' || this.router.url == '/stats') {
+    if(this.router.url === '/quiz') {
       this.router.navigateByUrl('stats');
-      localStorage.setItem('backToQuiz', 'true');
-      this.backToQuiz = localStorage.getItem('backToQuiz');
+      this.backToQuiz = true;
     } else {
       this.dialog.open(LogInDialog);
     }
@@ -46,8 +44,6 @@ export class AppComponent {
 
   async logoutUser(): Promise<void> {
     this.authSvc.logoutUser();
-    localStorage.setItem('backToQuiz', 'false');
-    this.backToQuiz = localStorage.getItem('backToQuiz');
     this.router.navigateByUrl('login');
     if(this.router.url !== '/login') {
       this.dialog.open(LoggedOutDialog);
