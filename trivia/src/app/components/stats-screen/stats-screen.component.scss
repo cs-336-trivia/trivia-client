@@ -11,12 +11,14 @@
   margin-left: 2px;
 }
 
+// Styling relevant to nested material cards
 mat-card > mat-card {
   margin: 10px;
   font-size: 12pt;
   font-weight: 500;
 }
 
+// Applies to correct and incorrect answer stats
 .answer {
   display: inline-block;
   width: calc((100% - 104px) / 2);

@@ -8,6 +8,7 @@ import { AngularFirestoreDocument } from '@angular/fire/firestore';
   templateUrl: './stats-screen.component.html',
   styleUrls: ['./stats-screen.component.scss']
 })
+
 export class StatsScreenComponent implements OnInit {
 
   public currentUser: string = localStorage.getItem('currentUser');
@@ -15,21 +16,17 @@ export class StatsScreenComponent implements OnInit {
   public userStatsRef: AngularFirestoreDocument<FirestoreRec>;
   public userStatsDoc: FirestoreRec;
 
+  // Initialization of statistics parameters
   public currentUserQuizzesCompleted: number;
   public currentUserRightCount: number;
   public currentUserWrongCount: number;
   public currentUserWinPercentage: number;
 
-  constructor(
-    private userStatsService: UserStatsService,
-  ) {
-    // this.userStatsService.getAll().valueChanges().subscribe(result => {
-    //   this.userStatsCollection = result;
-    //   console.log(this.userStatsCollection);
-    // });
-
+  constructor( private userStatsService: UserStatsService, ) {
+    // This grabs all statistics and data that is relevant to the user
     this.userStatsRef = this.userStatsService.getAll().doc(this.currentUser);
 
+    // This keeps track of the realtime value of each statistic
     this.userStatsRef.valueChanges().subscribe(result => {
       this.userStatsDoc = result;
 

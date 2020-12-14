@@ -1,3 +1,4 @@
+// Appearance of question blocks
 .questionCard {
     border: solid black 1px;
     border-radius: 15px;
@@ -13,29 +14,35 @@
 #firstParamInput {
     margin-left: 3vw;
 }
+
 .parameterInput {
     margin: 5px;
     background-color: #673ab7;
     color: white;
     margin-right: 10px;
 }
+
 h2 {
     margin-left: 5px;
     margin-bottom: 0px;
     padding-bottom: 0px;
 }
+
 .inputs {
     float: left;
     margin-right: 20px;
 }
+
 .timeRemaining {
     transition: 0.3s;
     min-width: 143px;
     background-color: #d6d6ea;
 }
+
 .questionsRemaining {
     background-color: #d6d6ea;
 }
+
 // This amazing trick to make custom list styles found here: https://stackoverflow.com/questions/1632005/ordered-list-html-lower-alpha-with-right-parentheses
 ol {
     columns: 2;
@@ -43,10 +50,12 @@ ol {
     padding-left: 0px;
     counter-reset: list;
 }
+
 ol li:before {
-    content: counter(list) ") "; //You can add additional argument in counter() that's a pre-made list style, i.e. "lower-alpha"
+    content: counter(list) ") "; // You can add additional argument in counter() that's a pre-made list style, i.e. "lower-alpha"
     counter-increment: list;
 }
+
 ol li {
     list-style: none;
     border: solid gray 1px;
@@ -55,29 +64,35 @@ ol li {
     list-style-position: inside;
     margin-bottom: 10px;
 }
+
 ol li:hover {
     background-color: #d6d6ea;
     transition: 0.3s;
     cursor: pointer;
 }
+
 .green-bg {
     transition: 0.3s;
     background-color: #90ee90;
 }
+
 .red-bg {
     transition: 0.3s;
     background-color: #E3AEB1;
 }
+
 .header {
   margin: 10px;
   margin-left: 16px;
   text-decoration: underline;
   font-weight: 600;
 }
+
 .subheader {
   margin-left: 16px;
   padding-bottom: 5px;
 }
+
 label {
   padding-right: 10px;
   padding-left: 10px;
@@ -86,6 +101,8 @@ label {
   font-size: 15pt;
   padding-bottom: 5px;
 }
+
+// "Start Quiz" button styling.
 button {
   display: inline-block;
   background-color: #9e5cfc;
@@ -102,6 +119,7 @@ button {
   font-size: 15pt;
 }
 
+// Statistics and current quiz information styling
 mat-card {
   margin: 5px;
   margin-left: 3vw;
@@ -115,15 +133,18 @@ mat-card {
   background-color: #ffd700;
   margin-right: 3vw;
 }
+
 .statsBox {
     display: inline-block;
 }
+
 @media only screen and (min-width: 950px) {
     .statsBox {
         float: right;
         display: inline-block;
     }
 }
+
 .correct {
   background-color: #90EE90;
 }

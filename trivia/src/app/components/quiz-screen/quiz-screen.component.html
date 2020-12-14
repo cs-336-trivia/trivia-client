@@ -1,8 +1,10 @@
-<!-- form -->
+<!-- Welcomes user to Application -->
 <h1 class="header">Welcome {{ currentUser }}, it's Trivia time!</h1>
+<!-- Prompt for user to use selectors -->
 <h2 class="subheader">Select question parameters:</h2>
 
 <div class="inputs">
+  <!-- Selectors for quiz modification -->
   <mat-card id="firstParamInput" class="parameterInput">
     <label>Difficulty:</label>
     <select [(ngModel)]="difficulty">
@@ -16,8 +18,9 @@
   <button mat-raised-button color="primary" (click)="startQuiz()">Start Quiz</button>
 </div>
 
+<!-- Boxes for temporary statistics -->
 <div class="tempStats">
-    <mat-card class="timeRemaining" id="timeRemaining">Time Remaining: {{timeLeft}}</mat-card> 
+    <mat-card class="timeRemaining" id="timeRemaining">Time Remaining: {{timeLeft}}</mat-card>
     <mat-card class="questionsRemaining">Question: {{ questionCount }} out of 10</mat-card>
   <div class="statsBox">
     <mat-card class="correct">{{ rightCount }} Correct</mat-card>
@@ -26,7 +29,8 @@
   </div>
 </div>
 <hr />
-<!-- questions -->
+
+<!-- Question card implementation -->
 <div class="questionCard" *ngFor="let question of data">
   <h3>{{ question.question }}</h3>
   <ol>
@@ -34,6 +38,7 @@
       {{ choice }}
     </li>
   </ol>
+  <!-- User question feedback -->
   <h3 *ngIf="question.gotIt">CORRECT!</h3>
   <h3 *ngIf="question.gotIt === false">Incorrect - Correct answer was {{question.correct_answer}}</h3>
 </div>

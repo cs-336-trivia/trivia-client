@@ -1,18 +1,23 @@
+<!-- Welcomes User to their personal statistics page -->
 <h1 class="header">Welcome to {{ currentUser }} stats page!</h1>
 
 <span>
   <mat-card>
     <h2 class="subheader">All-Time Stats:</h2>
     <mat-card class="completed">
+      <!-- Displays total number of quizzes initiated -->
       Quizzes Completed: {{ currentUserQuizzesCompleted }}!
     </mat-card>
     <mat-card class="correct answer">
+      <!-- Displays lifetime count of trivia questions answered correctly -->
       {{ currentUserRightCount }} Questions Correct.
     </mat-card>
     <mat-card class="incorrect answer">
+      <!-- Displays lifetime count of trivia questions answered incorrectly -->
       {{ currentUserWrongCount }} Questions Wrong.
     </mat-card>
     <mat-card class="average">
+      <!-- Displays lifetime ratio of correct to total answers as a percentage -->
       Overall Success Rate: {{ (currentUserWinPercentage * 100).toPrecision(4) }}%
     </mat-card>
   </mat-card>

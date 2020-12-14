@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
@@ -27,8 +27,7 @@ export class LoginScreenComponent implements OnInit {
     public dialog: MatDialog,
   ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   public user: User = {
     emailAddress: localStorage.emailAddress,
