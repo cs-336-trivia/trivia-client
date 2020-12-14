@@ -1,32 +1,28 @@
 <!-- form -->
 <h1 class="header">Welcome {{ currentUser }}, it's Trivia time!</h1>
 <h2 class="subheader">Select question parameters:</h2>
-<hr />
+
 <div class="inputs">
-  <div class="parameterInput">
+  <mat-card id="firstParamInput" class="parameterInput">
     <label>Difficulty:</label>
     <select [(ngModel)]="difficulty">
       <option *ngFor="let option of difficulties">{{ option }}</option>
     </select>
-  </div>
-  <div class="parameterInput">
     <label>Category:</label>
     <select [(ngModel)]="category">
       <option *ngFor="let option of categories">{{ option }}</option>
     </select>
-  </div>
+  </mat-card>
   <button mat-raised-button color="primary" (click)="startQuiz()">Start Quiz</button>
 </div>
 
 <div class="tempStats">
-  <!-- <div class="questionInfo"> -->
     <mat-card class="timeRemaining" id="timeRemaining">Time Remaining: {{timeLeft}}</mat-card> 
     <mat-card class="questionsRemaining">Question: {{ questionCount }} out of 10</mat-card>
-  <!-- </div> -->
   <div class="statsBox">
     <mat-card class="correct">{{ rightCount }} Correct</mat-card>
     <mat-card class="incorrect">{{ wrongCount }} Wrong</mat-card>
-    <mat-card class="win-percent">Win Percentage: {{ (winPercentage * 100).toPrecision(4) }}%</mat-card>
+    <mat-card class="win-percent">Success Rate: {{ (winPercentage * 100).toPrecision(4) }}%</mat-card>
   </div>
 </div>
 <hr />
@@ -34,13 +30,7 @@
 <div class="questionCard" *ngFor="let question of data">
   <h3>{{ question.question }}</h3>
   <ol>
-    <li
-      *ngFor="let choice of question.choiceList"
-      [ngClass]="{
-        'green-bg': question.gotIt && choice == question.correct_answer
-      }"
-      (click)="chooseAnswer(choice, question.question)"
-    >
+    <li *ngFor="let choice of question.choiceList" [ngClass]="{'green-bg': question.gotIt && choice == question.correct_answer, 'red-bg': question.gotItWrong && choice == question.chosenWrongChoice}" (click)="chooseAnswer(choice, question.question)">
       {{ choice }}
     </li>
   </ol>

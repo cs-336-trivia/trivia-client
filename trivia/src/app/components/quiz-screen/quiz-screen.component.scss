@@ -1,16 +1,23 @@
 .questionCard {
     border: solid black 1px;
     border-radius: 15px;
-    width: 90vw;
+    width: 93vw;
     min-width: 400px;
     margin-top: 20px;
-    margin-right: 3vw;
     margin-left: 3vw;
     padding: 10px;
     background-color: #e8e8fc;
+    display: inline-block;
+}
+
+#firstParamInput {
+    margin-left: 3vw;
 }
 .parameterInput {
     margin: 5px;
+    background-color: #673ab7;
+    color: white;
+    margin-right: 10px;
 }
 h2 {
     margin-left: 5px;
@@ -57,39 +64,41 @@ ol li:hover {
     transition: 0.3s;
     background-color: #90ee90;
 }
-
+.red-bg {
+    transition: 0.3s;
+    background-color: #f50404;
+}
 .header {
   margin: 10px;
   margin-left: 16px;
   text-decoration: underline;
   font-weight: 600;
 }
-
 .subheader {
   margin-left: 16px;
+  padding-bottom: 5px;
 }
-
 label {
-  margin-left: 3vw;
   padding-right: 10px;
+  padding-left: 10px;
   display: inline-block;
-  font-weight: 500;
-  font-size: 12pt;
+  font-weight: 450;
+  font-size: 15pt;
+  padding-bottom: 5px;
 }
-
 button {
-  display: inline;
+  display: inline-block;
   background-color: #9e5cfc;
   min-width: min-content;
   width: 94vw;
   margin-left: 3vw;
   margin-top: 10px;
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 12px;
   border: 0px;
   border-radius: 5px;
   color: white;
-  font-weight: 900;
+  font-weight: 450;
   font-size: 15pt;
 }
 
@@ -99,26 +108,22 @@ mat-card {
   min-width: min-content;
   display: inline-block;
   font-size: 12pt;
-  font-weight: 500;
+  font-weight: 550;
 }
 
 .win-percent {
   background-color: #ffd700;
   margin-right: 3vw;
 }
-// .statsBox {
-//     float: right;
-// }
+.statsBox {
+    display: inline-block;
+}
 @media only screen and (min-width: 950px) {
     .statsBox {
         float: right;
+        display: inline-block;
     }
 }
-// @media only screen and (max-width: 950px) {
-//     .questionInfo {
-//     }
-// }
-
 .correct {
   background-color: #90EE90;
 }
@@ -131,3 +136,5 @@ select {
   width: 100px;
   margin-top: 10px;
 }
+
+

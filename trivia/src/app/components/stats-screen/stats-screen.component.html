@@ -1,8 +1,8 @@
-<h1 class="header">Welcome to {{ currentUser }} statistics page!</h1>
+<h1 class="header">Welcome to {{ currentUser }} stats page!</h1>
 
 <span>
   <mat-card>
-    <h2 class="subheader">Here are your All-Time Statistics:</h2>
+    <h2 class="subheader">All-Time Stats:</h2>
     <mat-card class="completed">
       Quizzes Completed: {{ currentUserQuizzesCompleted }}!
     </mat-card>
@@ -13,7 +13,7 @@
       {{ currentUserWrongCount }} Questions Wrong.
     </mat-card>
     <mat-card class="average">
-      Win Percentage: {{ (currentUserWinPercentage * 100).toPrecision(4) }}%
+      Overall Success Rate: {{ (currentUserWinPercentage * 100).toPrecision(4) }}%
     </mat-card>
   </mat-card>
 </span>

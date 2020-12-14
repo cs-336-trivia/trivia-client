@@ -13,6 +13,8 @@ export interface Question {
     incorrect_answers: string[];
     choiceList: string[];
     gotIt: boolean;
+    gotItWrong: boolean;
+    chosenWrongChoice: string;
 }
 export interface Category {
   code: string;
@@ -160,7 +162,7 @@ export class QuizScreenComponent implements OnInit {
           //Puts the correct and incorrect answers into 1 array and randomizes them for display purposes
           this.data[0].choiceList = this.shuffleArray([this.data[0].correct_answer, this.data[0].incorrect_answers[0], this.data[0].incorrect_answers[1], this.data[0].incorrect_answers[2]]);
           this.data[0].gotIt = undefined;
-
+          this.data[0].gotItWrong = undefined;
           this.startTimer();
         // console.log(this.data);
         } else {
@@ -178,6 +180,7 @@ export class QuizScreenComponent implements OnInit {
       console.log(choice);
       if(choice === this.data[0].correct_answer) {
         this.data[0].gotIt = true;
+        this.data[0].gotItWrong = false;
         this.timeLeft = 0;
         await new Promise(r => setTimeout(r, 1250))
         this.rightCount++;
@@ -194,6 +197,8 @@ export class QuizScreenComponent implements OnInit {
         }
       } else {
         this.data[0].gotIt = false;
+        this.data[0].gotItWrong = true;
+        this.data[0].chosenWrongChoice = choice;
         this.timeLeft = 0;
         await new Promise(r => setTimeout(r, 1250))
         this.wrongCount++;
