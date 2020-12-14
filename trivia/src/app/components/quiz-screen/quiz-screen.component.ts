@@ -173,7 +173,7 @@ export class QuizScreenComponent implements OnInit {
   }
 
   async chooseAnswer(choice, question) {
-    if(this.data[0].question === question && this.questionCount != 10 && !this.processing) {
+    if(this.data[0].question === question && !this.gameOver && !this.processing) {
       this.processing = true;
       console.log(choice);
       if(choice === this.data[0].correct_answer) {
@@ -186,6 +186,7 @@ export class QuizScreenComponent implements OnInit {
           this.questionCount++;
           this.fetchData();
         } else {
+          console.log("end")
           this.gameOver = true;
           this.started = false;
         }
@@ -199,6 +200,7 @@ export class QuizScreenComponent implements OnInit {
           this.questionCount++;
           this.fetchData();
         } else {
+          console.log("end")
           this.gameOver = true;
           this.started = false;
         }
