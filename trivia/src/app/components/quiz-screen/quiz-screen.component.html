@@ -19,8 +19,8 @@
 </div>
 
 <div class="tempStats">
-  <p>Time Remaining: {{timeLeft}}</p>
-  <p>New Questions Remaining: {{ 9 - questionCount }}</p>
+  <mat-card class="timeRemaining">Time Remaining: {{timeLeft}}</mat-card>
+  <mat-card class="questionsRemaining">Question: {{ questionCount }} out of 10</mat-card>
   <mat-card class="correct">{{ rightCount }} Correct</mat-card>
   <mat-card class="incorrect">{{ wrongCount }} Wrong</mat-card>
   <mat-card class="win-percent">Win Percentage: {{ (winPercentage * 100).toPrecision(4) }}%</mat-card>
@@ -41,5 +41,5 @@
     </li>
   </ol>
   <h3 *ngIf="question.gotIt">CORRECT!</h3>
-  <h3 *ngIf="question.gotIt === false">Incorrect - correct answer was {{question.correct_answer}}</h3>
+  <h3 *ngIf="question.gotIt === false">Incorrect - Correct answer was {{question.correct_answer}}</h3>
 </div>
