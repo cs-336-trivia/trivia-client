@@ -41,7 +41,7 @@ export class QuizScreenComponent implements OnInit {
   winPercentage: number = 0.0;
   questionCount: number = 0;
   gameOver: boolean = false;
-  timeLeft: number = 10;
+  timeLeft: number = 15;
   public currentUser: string = localStorage.getItem('currentUser');
   public userStatsCollection: FirestoreRec[];
   public userStatsRef: AngularFirestoreDocument<FirestoreRec>;
@@ -74,6 +74,10 @@ export class QuizScreenComponent implements OnInit {
     this.data = [];
     this.questionCount = 0;
     this.fetchData();
+    this.questionCount = 1;
+    this.rightCount = 0;
+    this.wrongCount = 0;
+    this.winPercentage = 0;
   }
 
   async startTimer() {
@@ -84,14 +88,10 @@ export class QuizScreenComponent implements OnInit {
     if(this.data[0].gotIt === undefined) {
       this.chooseAnswer("oof");
     }
-    // this.chooseAnswer("Out of Time");
-    // if(this.timeLeft != -1) {
-    //   this.chooseAnswer("Out of Time");
-    // }
   }
 
   async fetchData(): Promise<void> {
-    this.timeLeft = 10;
+    this.timeLeft = 15;
     this.gameOver = false;
     if(!this.difficulty) {
       this.difficulty = "Random";
@@ -122,6 +122,11 @@ export class QuizScreenComponent implements OnInit {
           this.data.unshift(formated.results[0]); //adds new thing to beginning of the array
 
           //For some reason, doing .json() doesn't handle many special characters, so I had to manually do it here for the question and answers
+          //You mentioned decodeURI, it works on the w3schools test code editor things, but for some reason not in the web console
+
+          // this.data[0].question = decodeURI(this.data[0].question);
+          // this.data[0].correct_answer = decodeURI(this.data[0].correct_answer);
+          // this.data[0].incorrect_answers = this.data[0].incorrect_answers.map((answer) => decodeURI(answer));
           this.data[0].question = this.data[0].question.replace(/&quot;/g,'"');
           this.data[0].question = this.data[0].question.replace(/&#039;/g,"'");
           this.data[0].question = this.data[0].question.replace(/&rsquo;/g,"'");
@@ -161,11 +166,11 @@ export class QuizScreenComponent implements OnInit {
     if(choice === this.data[0].correct_answer) {
       console.log(1);
       this.data[0].gotIt = true;
-      this.timeLeft = -1;
+      this.timeLeft = 0;
       await new Promise(r => setTimeout(r, 1250))
       this.rightCount++;
       await this.userStatsService.update(this.currentUser, { rightCount: this.userStatsDoc.rightCount + 1 });
-      if(this.questionCount <= 8) {
+      if(this.questionCount <= 9) {
         this.questionCount++;
         this.fetchData();
       } else {
@@ -173,11 +178,11 @@ export class QuizScreenComponent implements OnInit {
       }
     } else {
       this.data[0].gotIt = false;
-      this.timeLeft = -1;
+      this.timeLeft = 0;
       await new Promise(r => setTimeout(r, 1250))
       this.wrongCount++;
       await this.userStatsService.update(this.currentUser, { wrongCount: this.userStatsDoc.wrongCount + 1 });
-      if(this.questionCount <= 8) {
+      if(this.questionCount <= 9) {
         this.questionCount++;
         this.fetchData();
       } else {
