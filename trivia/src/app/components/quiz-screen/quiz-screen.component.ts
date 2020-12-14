@@ -43,6 +43,7 @@ export class QuizScreenComponent implements OnInit {
   gameOver: boolean = false;
   timeLeft: number = 15;
   processing: boolean = false;
+  started: boolean = false;
   public currentUser: string = localStorage.getItem('currentUser');
   public userStatsCollection: FirestoreRec[];
   public userStatsRef: AngularFirestoreDocument<FirestoreRec>;
@@ -72,22 +73,27 @@ export class QuizScreenComponent implements OnInit {
   }
 
   startQuiz(): void {
-    this.data = [];
-    this.questionCount = 0;
-    this.fetchData();
-    this.questionCount = 1;
-    this.rightCount = 0;
-    this.wrongCount = 0;
-    this.winPercentage = 0;
+    if(!this.started) {
+      this.started = true;
+      this.data = [];
+      this.questionCount = 0;
+      this.fetchData();
+      this.questionCount = 1;
+      this.rightCount = 0;
+      this.wrongCount = 0;
+      this.winPercentage = 0;
+    }
   }
 
   async startTimer() {
     await new Promise(r => setTimeout(r, 1000))
     while(this.timeLeft > 0) {
       this.timeLeft--;
-      if(this.timeLeft <=5) {
-        document.getElementById('timeRemaining').style.backgroundColor = 'rgb(' + 255*(1-this.timeLeft/15) + ',' + 255*(this.timeLeft/15) +',0)';
-      }
+      // if(this.timeLeft <= 5) {
+      //   document.getElementById('timeRemaining').style.backgroundColor = 'rgb(' + 255*(1-this.timeLeft/15) + ',' + 255*(this.timeLeft/15) +',0)';
+      // } else {
+      //   document.getElementById('timeRemaining').style.backgroundColor = '#d6d6ea';
+      // }
       await new Promise(r => setTimeout(r, 1000))
     }
     if(this.data[0].gotIt === undefined) {
@@ -181,6 +187,7 @@ export class QuizScreenComponent implements OnInit {
           this.fetchData();
         } else {
           this.gameOver = true;
+          this.started = false;
         }
       } else {
         this.data[0].gotIt = false;
@@ -193,6 +200,7 @@ export class QuizScreenComponent implements OnInit {
           this.fetchData();
         } else {
           this.gameOver = true;
+          this.started = false;
         }
       }
       this.winPercentage = this.rightCount / (this.wrongCount + this.rightCount)
