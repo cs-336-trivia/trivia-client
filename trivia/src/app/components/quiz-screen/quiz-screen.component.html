@@ -19,11 +19,15 @@
 </div>
 
 <div class="tempStats">
-  <mat-card class="timeRemaining" id="timeRemaining">Time Remaining: {{timeLeft}}</mat-card> 
-  <mat-card class="questionsRemaining">Question: {{ questionCount }} out of 10</mat-card>
-  <mat-card class="correct">{{ rightCount }} Correct</mat-card>
-  <mat-card class="incorrect">{{ wrongCount }} Wrong</mat-card>
-  <mat-card class="win-percent">Win Percentage: {{ (winPercentage * 100).toPrecision(4) }}%</mat-card>
+  <!-- <div class="questionInfo"> -->
+    <mat-card class="timeRemaining" id="timeRemaining">Time Remaining: {{timeLeft}}</mat-card> 
+    <mat-card class="questionsRemaining">Question: {{ questionCount }} out of 10</mat-card>
+  <!-- </div> -->
+  <div class="statsBox">
+    <mat-card class="correct">{{ rightCount }} Correct</mat-card>
+    <mat-card class="incorrect">{{ wrongCount }} Wrong</mat-card>
+    <mat-card class="win-percent">Win Percentage: {{ (winPercentage * 100).toPrecision(4) }}%</mat-card>
+  </div>
 </div>
 <hr />
 <!-- questions -->
