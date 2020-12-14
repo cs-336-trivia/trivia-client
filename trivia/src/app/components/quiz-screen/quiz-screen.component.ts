@@ -50,17 +50,11 @@ export class QuizScreenComponent implements OnInit {
   constructor(
     private userStatsService: UserStatsService,
     ) {
-      // this.userStatsService.getAll().valueChanges().subscribe(result => {
-      //   this.userStatsCollection = result;
-      //   console.log(this.userStatsCollection);
-      // });
 
       this.userStatsRef = this.userStatsService.getAll().doc(this.currentUser);
 
       this.userStatsRef.valueChanges().subscribe(result => {
         this.userStatsDoc = result;
-        // console.log(result.id);
-        // console.log(this.userStatsDoc);
       });
     }
 
@@ -152,10 +146,10 @@ export class QuizScreenComponent implements OnInit {
           //Puts the correct and incorrect answers into 1 array and randomizes them for display purposes
           this.data[0].choiceList = this.shuffleArray([this.data[0].correct_answer, this.data[0].incorrect_answers[0], this.data[0].incorrect_answers[1], this.data[0].incorrect_answers[2]]);
           this.data[0].gotIt = undefined;
-          
+
           this.startTimer();
         // console.log(this.data);
-        } 
+        }
     } catch (err) {
         console.log('Fetch Error :-S', err);
     }
